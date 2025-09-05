@@ -38,5 +38,5 @@ int GameUI::GetCellNumberFromPoint(HWND hwnd, int xPos, int yPos)
 {
 	RECT rc;
 
-	return 0;
+	return -1;
 }
