@@ -155,11 +155,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_LBUTTONDOWN:
+    {
+       int x = GET_X_LPARAM(lParam);
+       int y = GET_Y_LPARAM(lParam);
+        int index = Ui.GetCellNumberFromPoint(hWnd, x, y);
 
-		pt.x = GET_X_LPARAM(lParam);
-		pt.y = GET_Y_LPARAM(lParam);
+       // Ui.printClick(hWnd, pt, index);
+       
+        HDC hdc = GetDC(hWnd);
+        if (NULL != hdc)
+        {
+            WCHAR temp[100];
 
-        break;
+            wsprintf(temp, L"index = %d", index);
+            //wsprintf(temp, L"index = %d , %d",pt.x,pt.y);
+            TextOut(hdc, x, y, temp, lstrlen(temp));
+            ReleaseDC(hWnd, hdc);
+        }
+
+    }
+    break;
 
 	case WM_GETMINMAXINFO:
 	{
@@ -173,11 +188,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-		  
+            RECT rc;
 
             // TODO: Add any drawing code that uses hdc here...
-			Ui.Draw(hdc, hWnd);
+            if (Ui.GetGameBoardRect(hWnd, &rc))
+            {
 
+                Ui.Draw(hWnd, hdc, &rc);
+            }
 
             EndPaint(hWnd, &ps);
         }

@@ -1,20 +1,22 @@
 #pragma once
 #include "framework.h"
-#include "Windowsx.h"
+#include <Windowsx.h>
 
 
 
 class GameUI {
 
 public:
-	void Draw(HDC hdc, HWND hwnd);
-	int GetCellNumberFromPoint(HWND hwnd,int xPos,int yPos);
+	void Draw(HWND hWnd,HDC hdc, RECT* pRect);
+	bool GetGameBoardRect(HWND hWnd, RECT* pRect);
+	int GetCellNumberFromPoint(HWND hWnd,int xPos,int yPos);
 
+	void printClick(HWND hWnd, POINT pt, int num);
 
 
 public:
 
-	RECT rc{};
+	
 	const int cellSize = 100;
 
 
