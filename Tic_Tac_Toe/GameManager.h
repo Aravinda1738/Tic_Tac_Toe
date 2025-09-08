@@ -22,7 +22,7 @@ public:
 
 	 bool UsePlayerTurn(int playerSelectedCell);
 	 void clearCells();
-	 void winCheck();
+	 bool winCheck();
 private:
 	
 

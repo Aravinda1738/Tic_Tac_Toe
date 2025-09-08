@@ -26,7 +26,12 @@ bool GameManager::UsePlayerTurn(int playerSelectedCell)
 
 			addTurn();
 			usedCells[totalTurnUsed].owner = playerTurn;
-			winCheck();
+			if (winCheck())
+			{
+				GameManager::isGameOver = true;
+				return false;
+			}
+			
 			return true;
 
 
@@ -54,7 +59,7 @@ void GameManager::clearCells()
 	}
 }
 
-void GameManager::winCheck()
+bool GameManager::winCheck()
 {
 
 	int player1[5];
@@ -85,14 +90,12 @@ void GameManager::winCheck()
 		}
 		if (winCount1 == 3) {
 			GameManager::isGameOver = true;
-			return;
+			return true;
 		}
-		else
-		{
-			winCount1 = 0;
-		}
+		
 
 	}
+	winCount1 = 0;
 	int winCount2 = 0;
 	for (int i = 0; i < 8; i++)
 	{
@@ -104,14 +107,13 @@ void GameManager::winCheck()
 		}
 		if (winCount2 == 3) {
 			GameManager::isGameOver = true;
-			return;
+			return true;
 		}
-		else
-		{
-			winCount2 = 0;
-		}
+		
 
 	}
+			winCount2 = 0;
+			return false;
 }
 
 
