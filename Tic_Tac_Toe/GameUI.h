@@ -9,13 +9,16 @@
 class GameUI {
 
 public:
-	void Draw(HWND hWnd, HDC hdc, RECT* pRect);
+	void Drawboard(HWND hWnd, HDC hdc, RECT* pRect);
 	bool GetGameBoardRect(HWND hWnd, RECT* pRect);
 	bool GetCellRect(HWND hWnd, int index, RECT* pRect);
 	int GetCellNumberFromPoint(HWND hWnd, int xPos, int yPos);
 
 	void printClick(HWND hWnd, POINT pt, int num);
 
+	void UpdateUiInCell(HDC hdc, HWND hWnd,int index);
+	void UpdateUiCells(HDC hdc, HWND hWnd);
+	void ClearUiCells(HDC hdc, HWND hWnd);
 
 public:
 
@@ -26,7 +29,7 @@ public:
 	
 	HBRUSH GetPlayerColour(int cellIndex);
 private:
-	HBRUSH hbr_Red, hbr_Blue,hrb_black;
+	HBRUSH hbr_Red, hbr_Blue,hrb_black, hrb_white;
 	GameManager gm;
 };
 

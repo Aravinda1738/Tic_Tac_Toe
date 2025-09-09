@@ -3,7 +3,7 @@
 
 bool GameManager::isGameOver = false;
 int GameManager::playerTurn = 0;
-cell GameManager::usedCells[8] = { {-1,0 },{-1,0 }, {-1,0 },{-1,0 },{-1,0 },{-1,0 }, {-1,0 },{-1,0 } };
+cell GameManager::usedCells[9] = { {-1,0 },{-1,0 }, {-1,0 },{-1,0 },{-1,0 },{-1,0 }, {-1,0 },{-1,0 },{-1,0 } };
 
 
 bool GameManager::UsePlayerTurn(int playerSelectedCell)
@@ -54,7 +54,7 @@ bool GameManager::UsePlayerTurn(int playerSelectedCell)
 void GameManager::clearCells()
 {
 	for (int i = 0; i < 8; ++i) {
-		usedCells[i].cellID = 0;
+		usedCells[i].cellID = -1;
 		usedCells[i].owner = 0;
 	}
 }
@@ -62,8 +62,8 @@ void GameManager::clearCells()
 bool GameManager::winCheck()
 {
 
-	int player1[5];
-	int player2[5];
+	int player1[8] ;
+	int player2[8];// = { -1,-1,-1,-1,-1,-1,-1 };
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -72,7 +72,7 @@ bool GameManager::winCheck()
 			player1[i] = usedCells[i].cellID;
 
 		}
-		if (usedCells->owner == 2)
+		if (usedCells[i].owner == 2)
 		{
 			player2[i] = usedCells[i].cellID;
 
@@ -82,37 +82,70 @@ bool GameManager::winCheck()
 	int winCount1 = 0;
 	for (int i = 0; i < 8; i++)
 	{
-		if (player1[i] == WinningCondition[i].a &&
-			player1[i] == WinningCondition[i].b &&
-			player1[i] == WinningCondition[i].c)
-		{
-			winCount1++;
-		}
-		if (winCount1 == 3) {
-			GameManager::isGameOver = true;
-			return true;
-		}
 		
+		for (int j = 0; j < 8; j++)
+		{
+			if (winCount1 == 3) {
+			
+				return true;
+			}
 
+			if (WinningCondition[i].a==player1[j])
+			{
+			  winCount1++;
+
+			}
+			if (WinningCondition[i].b==player1[j])
+			{
+			  winCount1++;
+
+			}
+			if (WinningCondition[i].c==player1[j])
+			{
+			  winCount1++;
+
+			}
+
+		}
+
+	  winCount1 = 0;
 	}
-	winCount1 = 0;
+
+
 	int winCount2 = 0;
 	for (int i = 0; i < 8; i++)
 	{
-		if (player2[i] == WinningCondition[i].a &&
-			player2[i] == WinningCondition[i].b &&
-			player2[i] == WinningCondition[i].c)
+		for (int j = 0; j < 8; j++)
 		{
-			winCount2++;
-		}
-		if (winCount2 == 3) {
-			GameManager::isGameOver = true;
-			return true;
+			if (WinningCondition[i].a == player2[j])
+			{
+				winCount2++;
+
+			}
+			if (WinningCondition[i].b == player2[j])
+			{
+				winCount2++;
+
+			}
+			if (WinningCondition[i].c == player2[j])
+			{
+				winCount2++;
+
+			}
+			if (winCount2 == 3) {
+				
+				return true;
+			}
+
+
+
+
 		}
 		
+		
 
-	}
 			winCount2 = 0;
+	}
 			return false;
 }
 
@@ -144,4 +177,11 @@ void GameManager::addTurn()
 		playerTurn = 1;
 	}
 
+}
+
+void GameManager::resetGame()
+{
+	playerTurn = 0;
+	totalTurnUsed = -1;
+	isGameOver = false;
 }

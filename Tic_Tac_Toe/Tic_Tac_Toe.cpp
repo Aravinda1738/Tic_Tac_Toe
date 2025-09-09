@@ -155,10 +155,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case ID_FILE_NEWGAME:
 		{
-			
-			MessageBox(hWnd, L"Start New Game",L"New Game", MB_YESNO | MB_ICONQUESTION);
+
+			MessageBox(hWnd, L"Start New Game", L"New Game", MB_YESNO | MB_ICONQUESTION);
 		}
-			break;
+		break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
@@ -170,12 +170,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HDC hdc = GetDC(hWnd);
 		if (NULL != hdc)
 		{
+			int x = GET_X_LPARAM(lParam);
+			int y = GET_Y_LPARAM(lParam);
+			int index = Ui.GetCellNumberFromPoint(hWnd, x, y);
+			gm.UsePlayerTurn(index);
 			if (gm.isGameOver == false)
 			{
-				int x = GET_X_LPARAM(lParam);
-				int y = GET_Y_LPARAM(lParam);
-				int index = Ui.GetCellNumberFromPoint(hWnd, x, y);
-				gm.UsePlayerTurn(index);
 
 				// Ui.printClick(hWnd, pt, index);
 
@@ -185,29 +185,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					//wsprintf(temp, L"index = %d", index);
 					////wsprintf(temp, L"index = %d , %d",pt.x,pt.y);
 					//TextOut(hdc, x, y, temp, lstrlen(temp));
-				if (index != -1)
-				{
-					RECT rcCell;
-					if (Ui.GetCellRect(hWnd, index, &rcCell))
-					{
-						FillRect(hdc, &rcCell, Ui.GetPlayerColour(gm.playerTurn));
-					}
-
-				}
+				Ui.UpdateUiInCell(hdc, hWnd, index);
 
 			}
 			else
 			{
+				Ui.UpdateUiInCell(hdc, hWnd, index);
 				int ret = MessageBox(hWnd, L"Game Over Restart ?", L"New Game", MB_YESNO | MB_ICONQUESTION);
 				if (IDYES == ret)
 				{
-					gm.playerTurn = 1; gm.isGameOver = false;
 					gm.clearCells();
+					Ui.ClearUiCells(hdc, hWnd);
+					gm.resetGame();
+
 				}
 			}
 
-			
-			
+
+
 			ReleaseDC(hWnd, hdc);
 		}
 
@@ -234,7 +229,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (Ui.GetGameBoardRect(hWnd, &rc))
 		{
 
-			Ui.Draw(hWnd, hdc, &rc);
+			Ui.Drawboard(hWnd, hdc, &rc);
 		}
 
 		EndPaint(hWnd, &ps);
@@ -269,3 +264,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return (INT_PTR)FALSE;
 }
+

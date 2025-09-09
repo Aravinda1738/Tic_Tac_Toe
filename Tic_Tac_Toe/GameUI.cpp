@@ -3,7 +3,7 @@
 
 
 
-void GameUI::Draw(HWND hWnd, HDC hdc, RECT* pRect)
+void GameUI::Drawboard(HWND hWnd, HDC hdc, RECT* pRect)
 {
 	RECT rc;
 
@@ -21,6 +21,8 @@ void GameUI::Draw(HWND hWnd, HDC hdc, RECT* pRect)
 
 	}
 
+	UpdateUiCells(hdc, hWnd);
+	
 
 }
 
@@ -114,11 +116,13 @@ void GameUI::printClick(HWND hWnd, POINT pt, int num)
 	}
 }
 
+
 void GameUI::CreateUiBrush()
 {
 	hbr_Red = CreateSolidBrush(RGB(255, 0, 0));
 	hbr_Blue = CreateSolidBrush(RGB(0, 0, 255));
 	hrb_black = CreateSolidBrush(RGB(0, 0, 0));
+	hrb_white = CreateSolidBrush(RGB(255, 255, 255));
 }
 
 HBRUSH GameUI::GetPlayerColour(int playerTurn)
@@ -137,6 +141,11 @@ HBRUSH GameUI::GetPlayerColour(int playerTurn)
 		return hbr_Blue;
 	}
 	break;
+	case 3:
+	{
+		return hrb_white;
+	}
+	break;
 	case -1:
 	{
 		return hrb_black;
@@ -151,5 +160,62 @@ void GameUI::DeleteUiBrush()
 	DeleteObject(hbr_Red);
 	DeleteObject(hbr_Blue);
 	DeleteObject(hrb_black);
+	DeleteObject(hrb_white);
 }
 
+
+void GameUI::UpdateUiInCell(HDC hdc, HWND hWnd, int index)
+{
+	if (index != -1)
+	{
+		RECT rcCell;
+		if (GetCellRect(hWnd, index, &rcCell))
+		{
+			FillRect(hdc, &rcCell, GetPlayerColour(gm.playerTurn));
+		}
+
+	}
+}
+
+void GameUI::UpdateUiCells(HDC hdc, HWND hWnd)
+{
+	RECT rcCell;
+	if (gm.isGameOver == false)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+
+
+
+			if (GetCellRect(hWnd, gm.usedCells[i].cellID, &rcCell))
+			{
+				if (gm.usedCells[i].owner == 1)
+				{
+					FillRect(hdc, &rcCell, GetPlayerColour(1)); // change to red p1
+				}
+				if (gm.usedCells[i].owner == 2)
+				{
+					FillRect(hdc, &rcCell, GetPlayerColour(2));  // change to blue p2
+				}
+
+
+			}
+
+		}
+	}
+	
+		
+	
+}
+
+void GameUI::ClearUiCells(HDC hdc, HWND hWnd)
+{
+
+	RECT rcCell;
+	for (int i = 0; i <=8; i++)
+	{
+		if (GetCellRect(hWnd, i, &rcCell)) {
+			FillRect(hdc, &rcCell, GetPlayerColour(3));      // change to white reset
+		}
+	}
+}
