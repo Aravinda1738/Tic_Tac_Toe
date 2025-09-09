@@ -23,7 +23,7 @@ public:
 	 bool UsePlayerTurn(int playerSelectedCell);
 	 void clearCells();
 	 bool winCheck();
-	void resetGame();
+	 void resetGame();
 private:
 	
 
@@ -36,6 +36,7 @@ private:
 public:
 	static bool isGameOver;
 	static int playerTurn;
+	static int winner;
 	static cell usedCells[9];
 private:
 	int totalTurnUsed = -1;

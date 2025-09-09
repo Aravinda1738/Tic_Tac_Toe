@@ -191,7 +191,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				Ui.UpdateUiInCell(hdc, hWnd, index);
-				int ret = MessageBox(hWnd, L"Game Over Restart ?", L"New Game", MB_YESNO | MB_ICONQUESTION);
+
+				WCHAR buffer[100];
+				const WCHAR gameDraw[] = L"Game Draw";
+				int ret=0;
+
+				switch (gm.winner)
+				{
+				case 0: 
+				{
+					 ret = MessageBox(hWnd, L"Game Draw !!!", L"New Game", MB_YESNO | MB_ICONQUESTION);
+				}
+					break;
+				case 1: 
+				{
+					 ret = MessageBox(hWnd, L"Winner Player 1 !!!", L"New Game", MB_YESNO | MB_ICONQUESTION);
+				}
+					break;
+				case 2:
+				{
+					 ret = MessageBox(hWnd, L"Winner Player 2 !!!", L"New Game", MB_YESNO | MB_ICONQUESTION);
+				}
+					break;
+
+				default:
+					ret = MessageBox(hWnd, L"Game Over !!!", L"New Game", MB_YESNO | MB_ICONQUESTION);
+					break;
+				}
+				
+
+				
 				if (IDYES == ret)
 				{
 					gm.clearCells();

@@ -22,7 +22,8 @@ void GameUI::Drawboard(HWND hWnd, HDC hdc, RECT* pRect)
 	}
 
 	UpdateUiCells(hdc, hWnd);
-	
+	DrawUiPlayerTurn(hdc, hWnd);
+
 
 }
 
@@ -62,10 +63,10 @@ bool GameUI::GetCellRect(HWND hWnd, int index, RECT* pRect)
 		int x = index % 3;
 		int y = index / 3;
 
-		pRect->left = (rcBoard.left + x * cellSize)+1;
-		pRect->top = (rcBoard.top + y * cellSize)+1;
-		pRect->right = (pRect->left + cellSize)-1;
-		pRect->bottom = (pRect->top + cellSize)-1;
+		pRect->left = (rcBoard.left + x * cellSize) + 1;
+		pRect->top = (rcBoard.top + y * cellSize) + 1;
+		pRect->right = (pRect->left + cellSize) - 1;
+		pRect->bottom = (pRect->top + cellSize) - 1;
 		return true;
 	}
 
@@ -127,8 +128,8 @@ void GameUI::CreateUiBrush()
 
 HBRUSH GameUI::GetPlayerColour(int playerTurn)
 {
-	
-	
+
+
 	switch (playerTurn)
 	{
 	case 1:
@@ -153,7 +154,7 @@ HBRUSH GameUI::GetPlayerColour(int playerTurn)
 	default:
 		break;
 	}
-	
+
 }
 void GameUI::DeleteUiBrush()
 {
@@ -175,6 +176,7 @@ void GameUI::UpdateUiInCell(HDC hdc, HWND hWnd, int index)
 		}
 
 	}
+	DrawUiPlayerTurn(hdc, hWnd);
 }
 
 void GameUI::UpdateUiCells(HDC hdc, HWND hWnd)
@@ -203,19 +205,50 @@ void GameUI::UpdateUiCells(HDC hdc, HWND hWnd)
 
 		}
 	}
-	
-		
-	
+
+
+
 }
 
 void GameUI::ClearUiCells(HDC hdc, HWND hWnd)
 {
 
 	RECT rcCell;
-	for (int i = 0; i <=8; i++)
+	for (int i = 0; i <= 8; i++)
 	{
 		if (GetCellRect(hWnd, i, &rcCell)) {
 			FillRect(hdc, &rcCell, GetPlayerColour(3));      // change to white reset
 		}
+	}
+}
+
+void GameUI::DrawUiPlayerTurn(HDC hdc, HWND hWnd)
+{
+	RECT rc;
+	if (GetClientRect(hWnd, &rc)&&gm.isGameOver==false)
+	{
+		WCHAR buffer[100];
+		const WCHAR DetailsP1[] = L"Player 1 : RED";
+		const WCHAR DetailsP2[] = L"Player 2 : BLUE";
+
+
+
+		TextOut(hdc, rc.left + 20, 10, DetailsP1, lstrlen(DetailsP1));
+		TextOut(hdc, rc.left + 20, 25, DetailsP2, lstrlen(DetailsP2));
+
+
+		const WCHAR playerTurnInUi[] = L"Player Turn : player";
+
+
+		// Use swprintf for safe formatting
+		swprintf(buffer, 100, L"%s %d", playerTurnInUi, ((gm.playerTurn % 2 ) ==1) ? 2 : 1);
+
+		// Now use buffer in TextOut
+		TextOut(hdc, rc.right / 2 - 80, 16, buffer, lstrlen(buffer));
+
+		/*const WCHAR playerTurnInUi[] = L"Player Turn : player" ;
+		TextOut(hdc, rc.right / 2 - 80, 16, playerTurnInUi, lstrlen(playerTurnInUi));
+		const WCHAR TPlayer[] = L"Player 1";
+		TextOut(hdc, rc.right / 2+20 , 16, TPlayer, lstrlen(TPlayer));*/
 	}
 }

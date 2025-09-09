@@ -20,6 +20,9 @@ public:
 	void UpdateUiCells(HDC hdc, HWND hWnd);
 	void ClearUiCells(HDC hdc, HWND hWnd);
 
+
+	void DrawUiPlayerTurn(HDC hdc, HWND hWnd);
+
 public:
 
 
